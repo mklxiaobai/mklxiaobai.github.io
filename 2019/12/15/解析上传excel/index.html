@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="baidu-site-verification" content="L6Lm9d5Crl"/>
+  
+  
+  
+  
+  <title>解析上传excel | Mrefri&#39;blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1.导入依赖库poi(解析xls格式)以及poi-ooxml(解析xlsx格式)12345678910&amp;lt;dependency&amp;gt;	&amp;lt;groupId&amp;gt;org.apache.poi&amp;lt;&#x2F;groupId&amp;gt;	&amp;lt;artifactId&amp;gt;poi&amp;lt;&#x2F;artifactId&amp;gt;	&amp;lt;version&amp;gt;3.17&amp;lt;&#x2F;version&amp;gt;&amp;lt;&#x2F;dep">
+<meta property="og:type" content="article">
+<meta property="og:title" content="解析上传excel">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;15&#x2F;%E8%A7%A3%E6%9E%90%E4%B8%8A%E4%BC%A0excel&#x2F;index.html">
+<meta property="og:site_name" content="Mrefri&#39;blog">
+<meta property="og:description" content="1.导入依赖库poi(解析xls格式)以及poi-ooxml(解析xlsx格式)12345678910&amp;lt;dependency&amp;gt;	&amp;lt;groupId&amp;gt;org.apache.poi&amp;lt;&#x2F;groupId&amp;gt;	&amp;lt;artifactId&amp;gt;poi&amp;lt;&#x2F;artifactId&amp;gt;	&amp;lt;version&amp;gt;3.17&amp;lt;&#x2F;version&amp;gt;&amp;lt;&#x2F;dep">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-11-26T12:47:52.958Z">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternative" href="/atom.xml" title="Mrefri&#39;blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/bingxiang1.png">
+  
+  
+  <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+      <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+  <!-- 加载特效 -->
+    <script src="/js/pace.js"></script>
+    <link href="/css/pace/pace-theme-flash.css" rel="stylesheet" />
+  <script>
+      var yiliaConfig = {
+          fancybox: true,
+          animate: true,
+          isHome: false,
+          isPost: true,
+          isArchive: false,
+          isTag: false,
+          isCategory: false,
+          open_in_new: false
+      }
+  </script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+        <a href="/" class="profilepic">
+            
+            <img lazy-src="/img/touxiang.png" class="js-avatar">
+            
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">Mrefri</a></h1>
+        </hgroup>
+        
+        
+        
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a  href="/archives/">所有文章</a></li>
+                        
+                            <li><a  href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/">玩转开发工具</a></li>
+                        
+                            <li><a  href="/categories/digital">玩转数码</a></li>
+                        
+                            <li><a  href="/categories/algorithm">算法学习</a></li>
+                        
+                            <li><a  href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fl github"  target="_blank" href="https://github.com/mklxiaobai" title="github">github</a>
+                            
+                                <a class="fl weibo"  target="_blank" href="/xxxxxxxx" title="weibo">weibo</a>
+                            
+                                <a class="fl rss"  target="_blank" href="/atom.xml" title="rss">rss</a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        
+                    </div>
+                </section>
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a target="_blank"  class="main-nav-link switch-friends-link" href="http://blog.csdn.net/baidu_21483933">csdn</a>
+                    
+                      <a target="_blank"  class="main-nav-link switch-friends-link" href="https://segmentfault.com/blog/maocg_web">segmentfault</a>
+                    
+                      <a target="_blank"  class="main-nav-link switch-friends-link" href="http://www.jianshu.com/users/eb37ef89c746/latest_articles">简书</a>
+                    
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">爱动漫,爱游戏,爱编程,爱运动,爱的太多了!</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Mrefri</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                
+                    <img lazy-src="/img/touxiang.png" class="js-avatar">
+                
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">Mrefri</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/">玩转开发工具</a></li>
+                
+                    <li><a href="/categories/digital">玩转数码</a></li>
+                
+                    <li><a href="/categories/algorithm">算法学习</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a class="github" target="_blank" href="https://github.com/mklxiaobai" title="github">github</a>
+                    
+                        <a class="weibo" target="_blank" href="/xxxxxxxx" title="weibo">weibo</a>
+                    
+                        <a class="rss" target="_blank" href="/atom.xml" title="rss">rss</a>
+                    
+                </div>
+            </nav>
+        </header>
+    </div>
+</nav>
+      <div class="body-wrap"><article id="post-解析上传excel" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2019/12/15/%E8%A7%A3%E6%9E%90%E4%B8%8A%E4%BC%A0excel/" class="article-date">
+      <time datetime="2019-12-15T13:07:11.835Z" itemprop="datePublished">2019-12-15</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      解析上传excel
+    </h1>
+  
+
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="1-导入依赖库poi-解析xls格式-以及poi-ooxml-解析xlsx格式"><a href="#1-导入依赖库poi-解析xls格式-以及poi-ooxml-解析xlsx格式" class="headerlink" title="1.导入依赖库poi(解析xls格式)以及poi-ooxml(解析xlsx格式)"></a>1.导入依赖库poi(解析xls格式)以及poi-ooxml(解析xlsx格式)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.apache.poi&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;poi&lt;/artifactId&gt;</span><br><span class="line">	&lt;version&gt;3.17&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.apache.poi&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;poi-ooxml&lt;/artifactId&gt;</span><br><span class="line">	&lt;version&gt;3.17&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"> </span><br><span class="line">@Component</span><br><span class="line">public class ExcelResolve &#123;</span><br><span class="line"> </span><br><span class="line">    public final String XLSX = &quot;.xlsx&quot;;</span><br><span class="line">    public final String XLS=&quot;.xls&quot;;</span><br><span class="line"> </span><br><span class="line">    /**</span><br><span class="line">     * 获取Excel文件（.xls和.xlsx都支持）</span><br><span class="line">     * @param file</span><br><span class="line">     * @return  解析excle后的Json数据</span><br><span class="line">     * @throws IOException</span><br><span class="line">     * @throws FileNotFoundException</span><br><span class="line">     * @throws InvalidFormatException</span><br><span class="line">     */</span><br><span class="line">    public JSONArray readExcel(File file) throws Exception&#123;</span><br><span class="line">        int res = checkFile(file);</span><br><span class="line"></span><br><span class="line">        if (res == 0) &#123;</span><br><span class="line">            System.out.println(&quot;File not found&quot;);</span><br><span class="line">        &#125;else if (res == 1) &#123;</span><br><span class="line">            return readXLSX(file);</span><br><span class="line">        &#125;else if (res == 2) &#123;</span><br><span class="line">            return readXLS(file);</span><br><span class="line">        &#125;</span><br><span class="line">        JSONArray array = new JSONArray();</span><br><span class="line">        return array;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    /**</span><br><span class="line">     * 判断File文件的类型</span><br><span class="line">     * @param file 传入的文件</span><br><span class="line">     * @return 0-文件为空，1-XLSX文件，2-XLS文件，3-其他文件</span><br><span class="line">     */</span><br><span class="line">    public int checkFile(File file)&#123;</span><br><span class="line">        if (file==null) &#123;</span><br><span class="line">            return 0;</span><br><span class="line">        &#125;</span><br><span class="line">        String flieName = file.getName();</span><br><span class="line">        if (flieName.endsWith(XLSX)) &#123;</span><br><span class="line">            return 1;</span><br><span class="line">        &#125;</span><br><span class="line">        if (flieName.endsWith(XLS)) &#123;</span><br><span class="line">            return 2;</span><br><span class="line">        &#125;</span><br><span class="line">        return 3;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    /**</span><br><span class="line">     * 读取XLSX文件</span><br><span class="line">     * @param file</span><br><span class="line">     * @return</span><br><span class="line">     * @throws IOException</span><br><span class="line">     * @throws InvalidFormatException</span><br><span class="line">     */</span><br><span class="line">    public JSONArray readXLSX(File file) throws InvalidFormatException, IOException&#123;</span><br><span class="line">        Workbook book = new XSSFWorkbook(file);</span><br><span class="line">        Sheet sheet = book.getSheetAt(0);</span><br><span class="line">        return read(sheet, book);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    /**</span><br><span class="line">     * 读取XLS文件</span><br><span class="line">     * @param file</span><br><span class="line">     * @return</span><br><span class="line">     * @throws IOException</span><br><span class="line">     * @throws FileNotFoundException</span><br><span class="line">     */</span><br><span class="line">    public JSONArray readXLS(File file) throws FileNotFoundException, IOException&#123;</span><br><span class="line">        POIFSFileSystem poifsFileSystem = new POIFSFileSystem(new FileInputStream(file));</span><br><span class="line">        Workbook book = new HSSFWorkbook(poifsFileSystem);</span><br><span class="line">        Sheet sheet = book.getSheetAt(0);</span><br><span class="line">        return read(sheet, book);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    /**</span><br><span class="line">     * 解析数据</span><br><span class="line">     * @param sheet 表格sheet对象</span><br><span class="line">     * @param book 用于流关闭</span><br><span class="line">     * @return</span><br><span class="line">     * @throws IOException</span><br><span class="line">     */</span><br><span class="line">    public JSONArray read(Sheet sheet,Workbook book) throws IOException&#123;</span><br><span class="line">        int rowStart = sheet.getFirstRowNum();	// 首行下标</span><br><span class="line">        int rowEnd = sheet.getLastRowNum();	// 尾行下标</span><br><span class="line">        // 如果首行与尾行相同，表明只有一行，直接返回空数组</span><br><span class="line">        if (rowStart == rowEnd) &#123;</span><br><span class="line">            book.close();</span><br><span class="line">            return new JSONArray();</span><br><span class="line">        &#125;</span><br><span class="line">        // 获取第一行JSON对象键</span><br><span class="line">        Row firstRow = sheet.getRow(rowStart);</span><br><span class="line">        int cellStart = firstRow.getFirstCellNum();</span><br><span class="line">        int cellEnd = firstRow.getLastCellNum();</span><br><span class="line">        Map&lt;Integer, String&gt; keyMap = new HashMap&lt;Integer, String&gt;();</span><br><span class="line">        for (int j = cellStart; j &lt; cellEnd; j++) &#123;</span><br><span class="line">            keyMap.put(j,getValue(firstRow.getCell(j), rowStart, j, book, true));</span><br><span class="line">        &#125;</span><br><span class="line">        // 获取每行JSON对象的值</span><br><span class="line">        JSONArray array = new JSONArray();</span><br><span class="line">        for(int i = rowStart+1; i &lt;= rowEnd ; i++) &#123;</span><br><span class="line">            Row eachRow = sheet.getRow(i);</span><br><span class="line">            JSONObject obj = new JSONObject();</span><br><span class="line">            StringBuffer sb = new StringBuffer();</span><br><span class="line">            for (int k = cellStart; k &lt; cellEnd; k++) &#123;</span><br><span class="line">                if (eachRow != null) &#123;</span><br><span class="line">                    String val = getValue(eachRow.getCell(k), i, k, book, false);</span><br><span class="line">                    sb.append(val);		// 所有数据添加到里面，用于判断该行是否为空</span><br><span class="line">                    obj.put(keyMap.get(k),val);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            if (sb.toString().length() &gt; 0) &#123;</span><br><span class="line">                array.add(obj);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        book.close();</span><br><span class="line">        return array;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    /**</span><br><span class="line">     * 获取每个单元格的数据</span><br><span class="line">     * @param cell 单元格对象</span><br><span class="line">     * @param rowNum 第几行</span><br><span class="line">     * @param index 该行第几个</span><br><span class="line">     * @param book 主要用于关闭流</span><br><span class="line">     * @param isKey 是否为键：true-是，false-不是。 如果解析Json键，值为空时报错；如果不是Json键，值为空不报错</span><br><span class="line">     * @return</span><br><span class="line">     * @throws IOException</span><br><span class="line">     */</span><br><span class="line">    public String getValue(Cell cell,int rowNum,int index,Workbook book,boolean isKey) throws IOException&#123;</span><br><span class="line"> </span><br><span class="line">        // 空白或空</span><br><span class="line">        if (cell == null || cell.getCellType()==Cell.CELL_TYPE_BLANK ) &#123;</span><br><span class="line">            if (isKey) &#123;</span><br><span class="line">                book.close();</span><br><span class="line">                throw new NullPointerException(String.format(&quot;the key on row %s index %s is null &quot;, ++rowNum,++index));</span><br><span class="line">            &#125;else&#123;</span><br><span class="line">                return &quot;&quot;;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        // 0. 数字 类型</span><br><span class="line">        if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) &#123;</span><br><span class="line">            if (HSSFDateUtil.isCellDateFormatted(cell)) &#123;</span><br><span class="line">                Date date = cell.getDateCellValue();</span><br><span class="line">                DateFormat df = new SimpleDateFormat(&quot;yyyy-MM-dd HH:mm:ss&quot;);</span><br><span class="line">                return df.format(date);</span><br><span class="line">            &#125;</span><br><span class="line">            String val = cell.getNumericCellValue()+&quot;&quot;;</span><br><span class="line">            val = val.toUpperCase();</span><br><span class="line">            if (val.contains(&quot;E&quot;)) &#123;</span><br><span class="line">                val = val.split(&quot;E&quot;)[0].replace(&quot;.&quot;, &quot;&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">            return val;</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        // 1. String类型</span><br><span class="line">        if (cell.getCellType() == Cell.CELL_TYPE_STRING) &#123;</span><br><span class="line">            String val = cell.getStringCellValue();</span><br><span class="line">            if (val == null || val.trim().length()==0) &#123;</span><br><span class="line">                if (book != null) &#123;</span><br><span class="line">                    book.close();</span><br><span class="line">                &#125;</span><br><span class="line">                return &quot;&quot;;</span><br><span class="line">            &#125;</span><br><span class="line">            return val.trim();</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        // 2. 公式 CELL_TYPE_FORMULA</span><br><span class="line">        if (cell.getCellType() == Cell.CELL_TYPE_FORMULA) &#123;</span><br><span class="line">            return cell.getStringCellValue();</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        // 4. 布尔值 CELL_TYPE_BOOLEAN</span><br><span class="line">        if (cell.getCellType() == Cell.CELL_TYPE_BOOLEAN) &#123;</span><br><span class="line">            return cell.getBooleanCellValue()+&quot;&quot;;</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        // 5.	错误 CELL_TYPE_ERROR</span><br><span class="line">        return &quot;&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">————————————————</span><br><span class="line">版权声明：本文为CSDN博主「Ragty_」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。</span><br><span class="line">原文链接：https://blog.csdn.net/huoji555/article/details/81697968</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a  href="/2019/12/15/%E8%A7%A3%E6%9E%90%E4%B8%8A%E4%BC%A0excel/">解析上传excel</a></p>
+        <p><span>文章作者:</span><a  href="/" title="访问 Mrefri 的个人博客">Mrefri</a></p>
+        <p><span>发布时间:</span>2019年12月15日 - 21时07分</p>
+        <p><span>最后更新:</span>2019年11月26日 - 20时47分</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2019/12/15/%E8%A7%A3%E6%9E%90%E4%B8%8A%E4%BC%A0excel/" title="解析上传excel">http://yoursite.com/2019/12/15/%E8%A7%A3%E6%9E%90%E4%B8%8A%E4%BC%A0excel/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2019/12/15/%E8%A7%A3%E6%9E%90%E4%B8%8A%E4%BC%A0excel/　　作者: Mrefri" title=""></span>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" target="_blank" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+<nav id="article-nav">
+  
+    <a  href="/2019/12/15/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          排序算法
+        
+      </div>
+    </a>
+  
+  
+    <a  href="/2019/12/15/%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%87%E4%BB%A4/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">服务器指令</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-导入依赖库poi-解析xls格式-以及poi-ooxml-解析xlsx格式"><span class="toc-number">1.</span> <span class="toc-text">1.导入依赖库poi(解析xls格式)以及poi-ooxml(解析xlsx格式)</span></a></li></ol>
+</div>
+<style>
+    .left-col .switch-btn {
+        display: none;
+    }
+    .left-col .switch-area {
+        display: none;
+    }
+</style>
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+            $(".switch-btn, .switch-area").fadeOut(300);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+            $(".switch-btn, .switch-area").fadeIn(500);
+        }
+    })
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+        $(".switch-btn, .switch-area").show();
+    }
+</script>
+
+
+
+
+<div class="bdsharebuttonbox">
+	<a href="#" class="fx fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+	<a href="#" class="fx fa-weixin bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+	<a href="#" class="fx fa-qq bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+	<a href="#" class="fx fa-facebook-official bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+	<a href="#" class="fx fa-twitter bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+	<a href="#" class="fx fa-linkedin bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+	<a href="#" class="fx fa-files-o bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+</div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+
+
+
+    
+        <section class="changyan" id="comments">
+  <!--<div id="uyan_frame"></div>-->
+  <div id="SOHUCS"></div>
+  <script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js"></script>
+  <script type="text/javascript">
+    window.changyan.api.config({
+      appid: 'xxxx',
+      conf: 'xxxxxxxxx'
+    });
+  </script>
+</section>
+    
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a  href="/2019/12/15/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" title="上一篇: 排序算法">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+        
+            <a  href="/2019/12/15/%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%87%E4%BB%A4/" title="下一篇: 服务器指令">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/12/15/%E4%BD%BF%E7%94%A8JSR303%E8%BF%9B%E8%A1%8C%E5%90%8E%E5%8F%B0%E6%A0%A1%E9%AA%8C/">使用JSR303进行后台校验</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/15/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">排序算法</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/15/%E8%A7%A3%E6%9E%90%E4%B8%8A%E4%BC%A0excel/">解析上传excel</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/15/%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%87%E4%BB%A4/">服务器指令</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/15/spring%E4%BA%8B%E5%8A%A1%E5%9B%9E%E6%BB%9A/">spring事务回滚</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/15/springboot%E6%95%B4%E5%90%88JestClient%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%93%8D%E4%BD%9Celasticsearch/">springboot整合JestClient客户端操作elasticsearch</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/15/springboot%E6%95%B4%E5%90%88dubbo/">springboot整合dubbo</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/15/sharding-jdbc%E9%85%8D%E7%BD%AE%E4%BD%BF%E7%94%A8/">sharding-jdbc配置使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/15/redisson%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%EF%BC%88%E5%8F%96%E8%87%AA%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%89/">redisson实现分布式锁（取自官方文档）</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/15/OKHttp%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97/">OKHttp操作指南</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/15/OAuth2%E5%8D%95%E7%82%B9%E7%99%BB%E5%BD%95%E5%BE%AE%E5%8D%9A/">OAuth2单点登录微博</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/15/mysql%E6%90%AD%E5%BB%BA%E4%B8%BB%E4%BB%8E%E6%95%B0%E6%8D%AE%E5%BA%93/">mysql搭建主从数据库</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/15/mybatisPlus%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/">mybatisPlus注意事项</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/15/mybatisPlus%E9%80%86%E5%90%91%E5%B7%A5%E7%A8%8B%E5%88%9B%E5%BB%BA/">mybatisPlus逆向工程创建</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/15/mybatisPlus%20Mapper%E6%8E%A5%E5%8F%A3%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95/">mybatisPlus Mapper接口常用方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/15/MultipartFile%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9%E8%A7%A3%E6%9E%90/">MultipartFile文件内容解析</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/15/JestClient/">JestClient</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/15/IDEA%E5%BF%AB%E6%8D%B7%E9%94%AE/">IDEA快捷键</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/15/ELK%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90%E7%B3%BB%E7%BB%9F%E6%90%AD%E5%BB%BA/">ELK日志分析系统搭建</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/15/elasticsearch%20Query%20DSL%20%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/">elasticsearch Query DSL 相关操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/15/elasticsearch%20ik%E5%88%86%E8%AF%8D%E5%99%A8%E5%AE%89%E8%A3%85/">elasticsearch ik分词器安装</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/15/dubbo%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE%E4%B8%8E%E7%89%B9%E6%80%A7/">dubbo相关配置与特性</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/15/docker%20%E9%83%A8%E7%BD%B2%E9%9D%99%E6%80%81%E9%A1%B5%E9%9D%A2%EF%BC%88%E4%B8%80%E4%B8%AA%E5%91%BD%E4%BB%A4%E5%B0%B1%E5%A4%9F%E4%BA%86%EF%BC%81%EF%BC%89/">docker 部署静态页面（一个命令就够了！）</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/15/@ResponseBody%E7%94%A8%E6%B3%95/">@ResponseBody用法</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/12/15/@PathVariable%E6%B3%A8%E8%A7%A3%E4%BD%BF%E7%94%A8/">@PathVariable注解使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/11/10/%E5%85%B3%E4%BA%8E%E8%85%BE%E8%AE%AF%E4%BA%91%E4%B8%8E%E9%98%BF%E9%87%8C%E4%BA%91/">关于腾讯云与阿里云</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/11/10/%E5%89%8D%E8%A8%80/">前言</a></li></ul>
+    
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+    <script>
+        $(".post-list").addClass("toc-article");
+        // $(".post-list-item a").attr("target","_blank");
+        $("#post-nav-button > a:nth-child(2)").click(function() {
+            $(".fa-bars, .fa-times").toggle();
+            $(".post-list").toggle(300);
+            if ($(".toc").length > 0) {
+                $("#toc, #tocButton").toggle(200, function() {
+                    if ($(".switch-area").is(":visible")) {
+                        $("#toc, .switch-btn, .switch-area").toggle();
+                        $("#tocButton").attr("value", valueHide);
+                        }
+                    })
+            }
+            else {
+                $(".switch-btn, .switch-area").fadeToggle(300);
+            }
+        })
+    </script>
+
+
+
+
+    <script>
+        
+    </script>
+
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                &copy; 2019 Mrefri
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank">Hexo &nbsp;&nbsp;</a><a href="https://github.com/maochunguang" target="_blank">Blog</a> by tommy
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" >极客到访数: 
+                            <span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>, </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit">本页阅读量: 
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+
+    </div>
+    
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+
+<script src="/js/main.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var backgroundnum = 1;
+            var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+            $("#mobile-nav").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+            $(".left-col").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+        })
+    </script>
+
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'xxxxx', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+
+	<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "//hm.baidu.com/hm.js?xxxxxx";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+	</script>
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    $(document).ready(function() {
+        if ($("#comments").length < 1) {
+            $("#scroll > a:nth-child(2)").hide();
+        };
+    })
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+  <script language="javascript">
+    $(function() {
+        $("a[title]").each(function() {
+            var a = $(this);
+            var title = a.attr('title');
+            if (title == undefined || title == "") return;
+            a.data('title', title).removeAttr('title').hover(
+            function() {
+                var offset = a.offset();
+                $("<div id=\"anchortitlecontainer\"></div>").appendTo($("body")).html(title).css({
+                    top: offset.top - a.outerHeight() - 15,
+                    left: offset.left + a.outerWidth()/2 + 1
+                }).fadeIn(function() {
+                    var pop = $(this);
+                    setTimeout(function() {
+                        pop.remove();
+                    }, pop.text().length * 800);
+                });
+            }, function() {
+                $("#anchortitlecontainer").remove();
+            });
+        });
+    });
+</script>
+
+
+  </div>
+</body>
+</html>

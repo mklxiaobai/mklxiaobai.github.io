@@ -222,11 +222,11 @@
 </nav>
       <div class="body-wrap">
   
-    <article id="post-关于腾讯云与阿里云" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-使用JSR303进行后台校验" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a  href="/2019/11/10/%E5%85%B3%E4%BA%8E%E8%85%BE%E8%AE%AF%E4%BA%91%E4%B8%8E%E9%98%BF%E9%87%8C%E4%BA%91/" class="article-date">
-      <time datetime="2019-11-10T11:18:26.000Z" itemprop="datePublished">2019-11-10</time>
+      <a  href="/2019/12/15/%E4%BD%BF%E7%94%A8JSR303%E8%BF%9B%E8%A1%8C%E5%90%8E%E5%8F%B0%E6%A0%A1%E9%AA%8C/" class="article-date">
+      <time datetime="2019-12-15T13:07:11.845Z" itemprop="datePublished">2019-12-15</time>
 </a>
 
     </div>
@@ -240,7 +240,7 @@
         
   
     <h1 itemprop="name">
-      <a  class="article-title" href="/2019/11/10/%E5%85%B3%E4%BA%8E%E8%85%BE%E8%AE%AF%E4%BA%91%E4%B8%8E%E9%98%BF%E9%87%8C%E4%BA%91/">关于腾讯云与阿里云</a>
+      <a  class="article-title" href="/2019/12/15/%E4%BD%BF%E7%94%A8JSR303%E8%BF%9B%E8%A1%8C%E5%90%8E%E5%8F%B0%E6%A0%A1%E9%AA%8C/">使用JSR303进行后台校验</a>
     </h1>
   
 
@@ -251,8 +251,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p>   腾讯云与阿里云我都买了，最开始买的是腾讯云的1核2G双十一活动88一年（当时阿里云最便宜的1核2G是学生套餐129，但是我弟认证了却还是显示要支付1000多，所以果断入了腾讯云）,然后腾讯云头疼的地方就来了,腾讯云华东的服务器在上海,docker镜像一直拉取失败，下图为证<br>   <img src="/img/timeout.jpg" alt="timeout1" title="Title"><br>   <img src="/img/timeout1.png" alt="timeout2" title="Title"><br>   没办法,尝试了国内镜像等措施无果后只能放弃了使用docker部署的打算，接下来问题又来了，为什么yum下载不了mysql?<br>   <img src="/img/timeout2.png" alt="timeout3" title="Title"><br>   提交工单后，腾讯云运维告知只能安装mariadb,那好吧,又是麻烦的安装完配置root外网访问权限时间，等我部署完第一个项目已是一周后（工作原因只在空闲时间倒腾）。<br>   在我买完腾讯云后，阿里云也马上也降价双十一86元一年（wtf?我才刚买没两天）,后来又按奈不住想在服务器上玩docker的心，直接入手了1核2G三年220,买完之后就觉得真香，docker下镜像根本不用配置国内镜像秒下，原来腾讯云倒腾了一周要部署的项目居然半天就部好了，docker真香。不过阿里云网页登录操作界面貌似有个bug，这点体验没有腾讯云好，不过用xshell登录都无所谓了。</p>
-<h3 id="关于第一次买阿里云以及腾讯云需要注意的点"><a href="#关于第一次买阿里云以及腾讯云需要注意的点" class="headerlink" title="关于第一次买阿里云以及腾讯云需要注意的点"></a>关于第一次买阿里云以及腾讯云需要注意的点</h3><p>   <strong>一定要先配置安全组！！！！一定要先配置安全组！！！！一定要先配置安全组！！！！</strong>重要的事情说三遍，不然你可能马上就会发现 what?怎么xshell连不上服务器，怎么部署的应用访问不了，这边都是需要配置入站规则的，以腾讯云为例一键放通已经覆盖了大部分常用的端口比如22,3306等也可以在教我设置里查看规则配置<br>   <img src="/img/shezhi.jpg" alt="shezhi" title="Title"><br>   第二在实例界面查看公网以及内网ip,xshell可以用公网ip直接连接服务器<br>   <img src="/img/ip.jpg" alt="ip" title="Title"><br>   还有关于navicat连接docker安装的最新mysql报错1251的问题，网上解释是mysql8的加密规则和以往不同，试了进入docker的mysql修改加密规则后依然无效，这时我docker重下了mysql5.6后启动镜像就顺畅没有问题了。</p>
+        <h2 id="1-给需要校验数据的javaBean上标注校验注解"><a href="#1-给需要校验数据的javaBean上标注校验注解" class="headerlink" title="1.给需要校验数据的javaBean上标注校验注解"></a>1.给需要校验数据的javaBean上标注校验注解</h2><h2 id="2-告诉SpringBoot，这个需要校验；-Valid"><a href="#2-告诉SpringBoot，这个需要校验；-Valid" class="headerlink" title="2.告诉SpringBoot，这个需要校验；@Valid"></a>2.告诉SpringBoot，这个需要校验；@Valid</h2><h2 id="3-如何感知校验成功还是失败；"><a href="#3-如何感知校验成功还是失败；" class="headerlink" title="3.如何感知校验成功还是失败；"></a>3.如何感知校验成功还是失败；</h2><p>只需要给开启了校验的javaBean参数后面，紧跟一个BindingResult对象就可以获取到校验结果;<br> 只要有BindingResult，即使校验错了，方法也会执行。我们需要手动处理</p>
 
       
     </div>
@@ -281,11 +280,11 @@
 
 
   
-    <article id="post-前言" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-排序算法" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a  href="/2019/11/10/%E5%89%8D%E8%A8%80/" class="article-date">
-      <time datetime="2019-11-10T01:44:26.000Z" itemprop="datePublished">2019-11-10</time>
+      <a  href="/2019/12/15/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" class="article-date">
+      <time datetime="2019-12-15T13:07:11.838Z" itemprop="datePublished">2019-12-15</time>
 </a>
 
     </div>
@@ -299,7 +298,7 @@
         
   
     <h1 itemprop="name">
-      <a  class="article-title" href="/2019/11/10/%E5%89%8D%E8%A8%80/">前言</a>
+      <a  class="article-title" href="/2019/12/15/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">排序算法</a>
     </h1>
   
 
@@ -310,8 +309,66 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h3 id="I’m-Mrefri"><a href="#I’m-Mrefri" class="headerlink" title="I’m Mrefri"></a>I’m Mrefri</h3><p>   大家好我是Mrefri，之前一直没有写博客的习惯,最近双十一活动入手了腾讯云以及百度云服务器准备搭建自己的网站踩了无数坑后，准备开始使用博客给大家分享我自己的踩坑经历和学习心得。</p>
-<p>   <img src="/img/touxiang.png" alt="this is my head portrait" title="Title"> </p>
+        
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-解析上传excel" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2019/12/15/%E8%A7%A3%E6%9E%90%E4%B8%8A%E4%BC%A0excel/" class="article-date">
+      <time datetime="2019-12-15T13:07:11.835Z" itemprop="datePublished">2019-12-15</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2019/12/15/%E8%A7%A3%E6%9E%90%E4%B8%8A%E4%BC%A0excel/">解析上传excel</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="1-导入依赖库poi-解析xls格式-以及poi-ooxml-解析xlsx格式"><a href="#1-导入依赖库poi-解析xls格式-以及poi-ooxml-解析xlsx格式" class="headerlink" title="1.导入依赖库poi(解析xls格式)以及poi-ooxml(解析xlsx格式)"></a>1.导入依赖库poi(解析xls格式)以及poi-ooxml(解析xlsx格式)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.apache.poi&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;poi&lt;/artifactId&gt;</span><br><span class="line">	&lt;version&gt;3.17&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.apache.poi&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;poi-ooxml&lt;/artifactId&gt;</span><br><span class="line">	&lt;version&gt;3.17&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"> </span><br><span class="line">@Component</span><br><span class="line">public class ExcelResolve &#123;</span><br><span class="line"> </span><br><span class="line">    public final String XLSX = &quot;.xlsx&quot;;</span><br><span class="line">    public final String XLS=&quot;.xls&quot;;</span><br><span class="line"> </span><br><span class="line">    /**</span><br><span class="line">     * 获取Excel文件（.xls和.xlsx都支持）</span><br><span class="line">     * @param file</span><br><span class="line">     * @return  解析excle后的Json数据</span><br><span class="line">     * @throws IOException</span><br><span class="line">     * @throws FileNotFoundException</span><br><span class="line">     * @throws InvalidFormatException</span><br><span class="line">     */</span><br><span class="line">    public JSONArray readExcel(File file) throws Exception&#123;</span><br><span class="line">        int res = checkFile(file);</span><br><span class="line"></span><br><span class="line">        if (res == 0) &#123;</span><br><span class="line">            System.out.println(&quot;File not found&quot;);</span><br><span class="line">        &#125;else if (res == 1) &#123;</span><br><span class="line">            return readXLSX(file);</span><br><span class="line">        &#125;else if (res == 2) &#123;</span><br><span class="line">            return readXLS(file);</span><br><span class="line">        &#125;</span><br><span class="line">        JSONArray array = new JSONArray();</span><br><span class="line">        return array;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    /**</span><br><span class="line">     * 判断File文件的类型</span><br><span class="line">     * @param file 传入的文件</span><br><span class="line">     * @return 0-文件为空，1-XLSX文件，2-XLS文件，3-其他文件</span><br><span class="line">     */</span><br><span class="line">    public int checkFile(File file)&#123;</span><br><span class="line">        if (file==null) &#123;</span><br><span class="line">            return 0;</span><br><span class="line">        &#125;</span><br><span class="line">        String flieName = file.getName();</span><br><span class="line">        if (flieName.endsWith(XLSX)) &#123;</span><br><span class="line">            return 1;</span><br><span class="line">        &#125;</span><br><span class="line">        if (flieName.endsWith(XLS)) &#123;</span><br><span class="line">            return 2;</span><br><span class="line">        &#125;</span><br><span class="line">        return 3;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    /**</span><br><span class="line">     * 读取XLSX文件</span><br><span class="line">     * @param file</span><br><span class="line">     * @return</span><br><span class="line">     * @throws IOException</span><br><span class="line">     * @throws InvalidFormatException</span><br><span class="line">     */</span><br><span class="line">    public JSONArray readXLSX(File file) throws InvalidFormatException, IOException&#123;</span><br><span class="line">        Workbook book = new XSSFWorkbook(file);</span><br><span class="line">        Sheet sheet = book.getSheetAt(0);</span><br><span class="line">        return read(sheet, book);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    /**</span><br><span class="line">     * 读取XLS文件</span><br><span class="line">     * @param file</span><br><span class="line">     * @return</span><br><span class="line">     * @throws IOException</span><br><span class="line">     * @throws FileNotFoundException</span><br><span class="line">     */</span><br><span class="line">    public JSONArray readXLS(File file) throws FileNotFoundException, IOException&#123;</span><br><span class="line">        POIFSFileSystem poifsFileSystem = new POIFSFileSystem(new FileInputStream(file));</span><br><span class="line">        Workbook book = new HSSFWorkbook(poifsFileSystem);</span><br><span class="line">        Sheet sheet = book.getSheetAt(0);</span><br><span class="line">        return read(sheet, book);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    /**</span><br><span class="line">     * 解析数据</span><br><span class="line">     * @param sheet 表格sheet对象</span><br><span class="line">     * @param book 用于流关闭</span><br><span class="line">     * @return</span><br><span class="line">     * @throws IOException</span><br><span class="line">     */</span><br><span class="line">    public JSONArray read(Sheet sheet,Workbook book) throws IOException&#123;</span><br><span class="line">        int rowStart = sheet.getFirstRowNum();	// 首行下标</span><br><span class="line">        int rowEnd = sheet.getLastRowNum();	// 尾行下标</span><br><span class="line">        // 如果首行与尾行相同，表明只有一行，直接返回空数组</span><br><span class="line">        if (rowStart == rowEnd) &#123;</span><br><span class="line">            book.close();</span><br><span class="line">            return new JSONArray();</span><br><span class="line">        &#125;</span><br><span class="line">        // 获取第一行JSON对象键</span><br><span class="line">        Row firstRow = sheet.getRow(rowStart);</span><br><span class="line">        int cellStart = firstRow.getFirstCellNum();</span><br><span class="line">        int cellEnd = firstRow.getLastCellNum();</span><br><span class="line">        Map&lt;Integer, String&gt; keyMap = new HashMap&lt;Integer, String&gt;();</span><br><span class="line">        for (int j = cellStart; j &lt; cellEnd; j++) &#123;</span><br><span class="line">            keyMap.put(j,getValue(firstRow.getCell(j), rowStart, j, book, true));</span><br><span class="line">        &#125;</span><br><span class="line">        // 获取每行JSON对象的值</span><br><span class="line">        JSONArray array = new JSONArray();</span><br><span class="line">        for(int i = rowStart+1; i &lt;= rowEnd ; i++) &#123;</span><br><span class="line">            Row eachRow = sheet.getRow(i);</span><br><span class="line">            JSONObject obj = new JSONObject();</span><br><span class="line">            StringBuffer sb = new StringBuffer();</span><br><span class="line">            for (int k = cellStart; k &lt; cellEnd; k++) &#123;</span><br><span class="line">                if (eachRow != null) &#123;</span><br><span class="line">                    String val = getValue(eachRow.getCell(k), i, k, book, false);</span><br><span class="line">                    sb.append(val);		// 所有数据添加到里面，用于判断该行是否为空</span><br><span class="line">                    obj.put(keyMap.get(k),val);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            if (sb.toString().length() &gt; 0) &#123;</span><br><span class="line">                array.add(obj);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        book.close();</span><br><span class="line">        return array;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    /**</span><br><span class="line">     * 获取每个单元格的数据</span><br><span class="line">     * @param cell 单元格对象</span><br><span class="line">     * @param rowNum 第几行</span><br><span class="line">     * @param index 该行第几个</span><br><span class="line">     * @param book 主要用于关闭流</span><br><span class="line">     * @param isKey 是否为键：true-是，false-不是。 如果解析Json键，值为空时报错；如果不是Json键，值为空不报错</span><br><span class="line">     * @return</span><br><span class="line">     * @throws IOException</span><br><span class="line">     */</span><br><span class="line">    public String getValue(Cell cell,int rowNum,int index,Workbook book,boolean isKey) throws IOException&#123;</span><br><span class="line"> </span><br><span class="line">        // 空白或空</span><br><span class="line">        if (cell == null || cell.getCellType()==Cell.CELL_TYPE_BLANK ) &#123;</span><br><span class="line">            if (isKey) &#123;</span><br><span class="line">                book.close();</span><br><span class="line">                throw new NullPointerException(String.format(&quot;the key on row %s index %s is null &quot;, ++rowNum,++index));</span><br><span class="line">            &#125;else&#123;</span><br><span class="line">                return &quot;&quot;;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        // 0. 数字 类型</span><br><span class="line">        if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) &#123;</span><br><span class="line">            if (HSSFDateUtil.isCellDateFormatted(cell)) &#123;</span><br><span class="line">                Date date = cell.getDateCellValue();</span><br><span class="line">                DateFormat df = new SimpleDateFormat(&quot;yyyy-MM-dd HH:mm:ss&quot;);</span><br><span class="line">                return df.format(date);</span><br><span class="line">            &#125;</span><br><span class="line">            String val = cell.getNumericCellValue()+&quot;&quot;;</span><br><span class="line">            val = val.toUpperCase();</span><br><span class="line">            if (val.contains(&quot;E&quot;)) &#123;</span><br><span class="line">                val = val.split(&quot;E&quot;)[0].replace(&quot;.&quot;, &quot;&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">            return val;</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        // 1. String类型</span><br><span class="line">        if (cell.getCellType() == Cell.CELL_TYPE_STRING) &#123;</span><br><span class="line">            String val = cell.getStringCellValue();</span><br><span class="line">            if (val == null || val.trim().length()==0) &#123;</span><br><span class="line">                if (book != null) &#123;</span><br><span class="line">                    book.close();</span><br><span class="line">                &#125;</span><br><span class="line">                return &quot;&quot;;</span><br><span class="line">            &#125;</span><br><span class="line">            return val.trim();</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        // 2. 公式 CELL_TYPE_FORMULA</span><br><span class="line">        if (cell.getCellType() == Cell.CELL_TYPE_FORMULA) &#123;</span><br><span class="line">            return cell.getStringCellValue();</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        // 4. 布尔值 CELL_TYPE_BOOLEAN</span><br><span class="line">        if (cell.getCellType() == Cell.CELL_TYPE_BOOLEAN) &#123;</span><br><span class="line">            return cell.getBooleanCellValue()+&quot;&quot;;</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">        // 5.	错误 CELL_TYPE_ERROR</span><br><span class="line">        return &quot;&quot;;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">————————————————</span><br><span class="line">版权声明：本文为CSDN博主「Ragty_」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。</span><br><span class="line">原文链接：https://blog.csdn.net/huoji555/article/details/81697968</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -340,6 +397,460 @@
 
 
   
+    <article id="post-服务器指令" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2019/12/15/%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%87%E4%BB%A4/" class="article-date">
+      <time datetime="2019-12-15T13:07:11.831Z" itemprop="datePublished">2019-12-15</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2019/12/15/%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%87%E4%BB%A4/">服务器指令</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <ol>
+<li>查看进程占用内存</li>
+<li>ps -e -o ‘pid,comm,args,pcpu,rsz,vsz,stime,user,uid’ </li>
+</ol>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-spring事务回滚" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2019/12/15/spring%E4%BA%8B%E5%8A%A1%E5%9B%9E%E6%BB%9A/" class="article-date">
+      <time datetime="2019-12-15T13:07:11.827Z" itemprop="datePublished">2019-12-15</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2019/12/15/spring%E4%BA%8B%E5%8A%A1%E5%9B%9E%E6%BB%9A/">spring事务回滚</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>回滚方式一：</p>
+<p> if(userSave){</p>
+<p>   try {</p>
+<p>   userDao.save(user);</p>
+<p>   userCapabilityQuotaDao.save(capabilityQuota);</p>
+<p>   } catch (Exception e) {</p>
+<p>   logger.info(“能力开通接口，开户异常，异常信息：”+e);</p>
+<p>   throw new RuntimeException();</p>
+<p>   }</p>
+<p> }</p>
+<p>回滚方式二：</p>
+<p>if(userSave){</p>
+<p>   try {</p>
+<p>   userDao.save(user);</p>
+<p>   userCapabilityQuotaDao.save(capabilityQuota);</p>
+<p>   } catch (Exception e) {</p>
+<p>   logger.info(“能力开通接口，开户异常，异常信息：”+e);</p>
+<p>   TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();</p>
+<p>   }</p>
+<p>}<br>原因：默认spring事务只在发生未被捕获的 runtimeExcetpion时才回滚。<br>  解决方案：<br>  方案1.例如service层处理事务，那么service中的方法中不做异常捕获，或者在catch语句中最后增加throw new RuntimeException()语句，以便让aop捕获异常再去回滚，并且在service上层（webservice客户端，view层action）要继续捕获这个异常并处理<br>  方案2.在service层方法的catch语句中增加：TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();语句，手动回滚，这样上层就无需去处理异常（现在项目的做法）</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-springboot整合JestClient客户端操作elasticsearch" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2019/12/15/springboot%E6%95%B4%E5%90%88JestClient%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%93%8D%E4%BD%9Celasticsearch/" class="article-date">
+      <time datetime="2019-12-15T13:07:11.824Z" itemprop="datePublished">2019-12-15</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2019/12/15/springboot%E6%95%B4%E5%90%88JestClient%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%93%8D%E4%BD%9Celasticsearch/">springboot整合JestClient客户端操作elasticsearch</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="1-添加依赖"><a href="#1-添加依赖" class="headerlink" title="1.添加依赖"></a>1.添加依赖</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- https://mvnrepository.com/artifact/io.searchbox/jest --&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;io.searchbox&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;jest&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;5.3.4&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt; </span><br><span class="line">&lt;!-- https://mvnrepository.com/artifact/org.elasticsearch/elasticsearch --&gt;</span><br><span class="line">//对应elasticsearch环境版本</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.elasticsearch&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;elasticsearch&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;5.6.11&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="2-配置文件配置elasticsearch"><a href="#2-配置文件配置elasticsearch" class="headerlink" title="2.配置文件配置elasticsearch"></a>2.配置文件配置elasticsearch</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//填写地址一定要带上http否则会报索引非法字符错误，太坑了找问题找了一天</span><br><span class="line">spring.elasticsearch.jest.uris[0]=http://XXX:9200</span><br><span class="line">//若搭建了elasticsearch集群，则添加每个节点的url</span><br><span class="line">spring.elasticsearch.jest.uris[1]=http://XXX:9201</span><br></pre></td></tr></table></figure>
+<h3 id="3-JestClient操作"><a href="#3-JestClient操作" class="headerlink" title="3.JestClient操作"></a>3.JestClient操作</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">//注入JestClient</span><br><span class="line">    @Autowired</span><br><span class="line">    JestClient jestClient;</span><br><span class="line">    </span><br><span class="line">    Action action = new Crud.Builder(携带的数据).其他信息.build();//Action包含Update  Delete Search Index</span><br><span class="line">    DocumentResult execute = jestClient.execute(action);</span><br><span class="line">例：</span><br><span class="line">        User user = new User();</span><br><span class="line">        user.setEmail(&quot;122333&quot;);user.setUserName(&quot;dsadasda&quot;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        Index index = new Index.Builder(user)</span><br><span class="line">                .index(&quot;user&quot;)//索引名</span><br><span class="line">                .type(&quot;info&quot;)//type名</span><br><span class="line">                .build();</span><br><span class="line">        //执行</span><br><span class="line">        DocumentResult execute = jestClient.execute(index);</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-springboot整合dubbo" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2019/12/15/springboot%E6%95%B4%E5%90%88dubbo/" class="article-date">
+      <time datetime="2019-12-15T13:07:11.821Z" itemprop="datePublished">2019-12-15</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2019/12/15/springboot%E6%95%B4%E5%90%88dubbo/">springboot整合dubbo</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="服务提供者步骤"><a href="#服务提供者步骤" class="headerlink" title="服务提供者步骤"></a>服务提供者步骤</h2><h3 id="1-引入dubbo包"><a href="#1-引入dubbo包" class="headerlink" title="1.引入dubbo包"></a>1.引入dubbo包</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;com.alibaba.boot&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;dubbo-spring-boot-starter&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;0.2.0&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="2-application-properties进行相关配置"><a href="#2-application-properties进行相关配置" class="headerlink" title="2.application.properties进行相关配置"></a>2.application.properties进行相关配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">#该服务名字</span><br><span class="line">dubbo.application.name=gmall-pms</span><br><span class="line">#注册中心ip地址</span><br><span class="line">dubbo.registry.address=zookeeper://192.168.159.128:2182</span><br><span class="line">#协议名称</span><br><span class="line">dubbo.protocol.name=dubbo</span><br><span class="line">#暴露端口</span><br><span class="line">dubbo.protocol.port=20880</span><br><span class="line">#关闭启动检查(若不关闭后台没有提供者服务的话启动消费者会抛异常)</span><br><span class="line">dubbo.consumer.check=false</span><br></pre></td></tr></table></figure>
+<h3 id="3-使用dubbo的Service注解"><a href="#3-使用dubbo的Service注解" class="headerlink" title="3.使用dubbo的Service注解"></a>3.使用dubbo的Service注解</h3><p><a href="https://note.youdao.com/" target="_blank" rel="noopener">@com.alibaba.dubbo.config.annotation.Service</a>暴露service以及@Component注解提供本服务注入</p>
+<h3 id="4-启动类添加-EnableDubbo注解"><a href="#4-启动类添加-EnableDubbo注解" class="headerlink" title="4.启动类添加@EnableDubbo注解"></a>4.启动类添加@EnableDubbo注解</h3><h2 id="消费者步骤"><a href="#消费者步骤" class="headerlink" title="消费者步骤"></a>消费者步骤</h2><h3 id="1-application-properties进行相关配置"><a href="#1-application-properties进行相关配置" class="headerlink" title="1.application.properties进行相关配置"></a>1.application.properties进行相关配置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#该消费者名字</span><br><span class="line">dubbo.application.name=gmall-pms</span><br><span class="line">#注册中心ip地址</span><br><span class="line">dubbo.registry.address=zookeeper://192.168.159.128:2182</span><br></pre></td></tr></table></figure>
+<h3 id="2-使用Dubbo的-Reference注解注入提供者的Service"><a href="#2-使用Dubbo的-Reference注解注入提供者的Service" class="headerlink" title="2.使用Dubbo的@Reference注解注入提供者的Service"></a>2.使用Dubbo的@Reference注解注入提供者的Service</h3><p>com.alibaba.dubbo.config.annotation.Reference<br>@Reference</p>
+<h3 id="3-启动类添加-EnableDubbo注解"><a href="#3-启动类添加-EnableDubbo注解" class="headerlink" title="3.启动类添加@EnableDubbo注解"></a>3.启动类添加@EnableDubbo注解</h3>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-sharding-jdbc配置使用" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2019/12/15/sharding-jdbc%E9%85%8D%E7%BD%AE%E4%BD%BF%E7%94%A8/" class="article-date">
+      <time datetime="2019-12-15T13:07:11.817Z" itemprop="datePublished">2019-12-15</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2019/12/15/sharding-jdbc%E9%85%8D%E7%BD%AE%E4%BD%BF%E7%94%A8/">sharding-jdbc配置使用</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="1-引入sharding-jdbc依赖"><a href="#1-引入sharding-jdbc依赖" class="headerlink" title="1.引入sharding-jdbc依赖"></a>1.引入sharding-jdbc依赖</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;io.shardingjdbc&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;sharding-jdbc-core&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;2.0.3&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="2-编写sharding-jdbc配置类"><a href="#2-编写sharding-jdbc配置类" class="headerlink" title="2.编写sharding-jdbc配置类"></a>2.编写sharding-jdbc配置类</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@Configuration</span><br><span class="line">public class ShardingDataSourceConfig &#123;</span><br><span class="line">    @Bean</span><br><span class="line">    public DataSource dataSource() throws IOException, SQLException &#123;</span><br><span class="line">    //获取yml配置文件</span><br><span class="line">        File file = ResourceUtils.getFile(&quot;classpath:sharding-jdbc.yml&quot;);</span><br><span class="line">    //创建MasterSlaveDataSourceFactory工厂</span><br><span class="line">        DataSource dataSource = MasterSlaveDataSourceFactory.createDataSource(file);</span><br><span class="line">        return dataSource;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="3-编写sharding-jdbc-yml文件"><a href="#3-编写sharding-jdbc-yml文件" class="headerlink" title="3.编写sharding-jdbc.yml文件"></a>3.编写sharding-jdbc.yml文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">dataSources:</span><br><span class="line">  db_master: !!com.zaxxer.hikari.HikariDataSource</span><br><span class="line">    driverClassName: com.mysql.jdbc.Driver</span><br><span class="line">    jdbcUrl: jdbc:mysql://xxxxxx:xxx/test?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false</span><br><span class="line">    username: xxx</span><br><span class="line">    password: xxx</span><br><span class="line">  db_slave: !!com.zaxxer.hikari.HikariDataSource</span><br><span class="line">    driverClassName: com.mysql.jdbc.Driver</span><br><span class="line">    jdbcUrl: jdbc:mysql://xxxxxx:xxx/test?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false</span><br><span class="line">    username: xxx</span><br><span class="line">    password: xxx</span><br><span class="line">masterSlaveRule:</span><br><span class="line">  name: db_ms</span><br><span class="line">  masterDataSourceName: db_master</span><br><span class="line">  slaveDataSourceNames: [db_slave]</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-redisson实现分布式锁（取自官方文档）" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2019/12/15/redisson%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%EF%BC%88%E5%8F%96%E8%87%AA%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%89/" class="article-date">
+      <time datetime="2019-12-15T13:07:11.813Z" itemprop="datePublished">2019-12-15</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2019/12/15/redisson%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%EF%BC%88%E5%8F%96%E8%87%AA%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3%EF%BC%89/">redisson实现分布式锁（取自官方文档）</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="1-进入新浪微博开放平台"><a href="#1-进入新浪微博开放平台" class="headerlink" title="1.进入新浪微博开放平台"></a>1.进入新浪微博开放平台</h3><p>进入新浪微博开放平台，登录用户信息</p>
+<h3 id="2-创建应用"><a href="#2-创建应用" class="headerlink" title="2.创建应用"></a>2.创建应用</h3><p>点击上方菜单栏微连接下网站链接子菜单，点击立即接入，输入应用名，点击创建按钮</p>
+<h3 id="3-添加测试账号，授权页"><a href="#3-添加测试账号，授权页" class="headerlink" title="3.添加测试账号，授权页"></a>3.添加测试账号，授权页</h3><p>在应用信息下测试信息中添加测试账号，在高级信息中添加授权网页</p>
+<h3 id="4-跳转到客户授权页"><a href="#4-跳转到客户授权页" class="headerlink" title="4.跳转到客户授权页"></a>4.跳转到客户授权页</h3><p>以下为官方文档地址：[<a href="https://open.weibo.com/wiki/Connect/login]" target="_blank" rel="noopener">https://open.weibo.com/wiki/Connect/login]</a><br>跳转链接</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://api.weibo.com/oauth2/authorize?client_id=替换为App Key&amp;response_type=code&amp;redirect_uri=替换为授权网页地址</span><br></pre></td></tr></table></figure>
+<p>如果用户同意授权，则会跳转至授权页并赋予code<br> <a href="http://YOUR_REGISTERED_REDIRECT_URI/?code=CODE：" target="_blank" rel="noopener">http://YOUR_REGISTERED_REDIRECT_URI/?code=CODE：</a></p>
+<h3 id="5-换取Access-Token"><a href="#5-换取Access-Token" class="headerlink" title="5.换取Access Token"></a>5.换取Access Token</h3><p>通过post方式传参</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://api.weibo.com/oauth2/access_token?client_id=替换为App Key&amp;client_secret=替换为App Secret&amp;grant_type=authorization_code&amp;redirect_uri=替换为授权网页地址&amp;code=上文获取的CODE</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">返回得到access_token</span><br><span class="line">&#123;</span><br><span class="line">    &quot;access_token&quot;: &quot;2.00pDpxyGd3J5bEef6b98778e0ZKsu4&quot;,</span><br><span class="line">    &quot;remind_in&quot;: &quot;157679999&quot;,</span><br><span class="line">    &quot;expires_in&quot;: 157679999,</span><br><span class="line">    &quot;uid&quot;: &quot;6397634785&quot;,</span><br><span class="line">    &quot;isRealName&quot;: &quot;true&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="6-使用AccessToken调用开发API获取用户信息"><a href="#6-使用AccessToken调用开发API获取用户信息" class="headerlink" title="6.使用AccessToken调用开发API获取用户信息"></a>6.使用AccessToken调用开发API获取用户信息</h3><p>官方API文档地址[<a href="https://open.weibo.com/wiki/%E5%BE%AE%E5%8D%9AAPI]" target="_blank" rel="noopener">https://open.weibo.com/wiki/%E5%BE%AE%E5%8D%9AAPI]</a></p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-OKHttp操作指南" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a  href="/2019/12/15/OKHttp%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97/" class="article-date">
+      <time datetime="2019-12-15T13:07:11.806Z" itemprop="datePublished">2019-12-15</time>
+</a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a  class="article-title" href="/2019/12/15/OKHttp%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97/">OKHttp操作指南</a>
+    </h1>
+  
+
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h3 id="1-get请求-同步"><a href="#1-get请求-同步" class="headerlink" title="1.get请求(同步)"></a>1.get请求(同步)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">    OkHttpClient client = new OkHttpClient();</span><br><span class="line">    </span><br><span class="line">    @Test</span><br><span class="line">    public void testget()&#123;</span><br><span class="line">    String url=&quot;http://localhost:8081/admin/test&quot;;</span><br><span class="line">    Request request = new Request.Builder()</span><br><span class="line">                    .url(url)</span><br><span class="line">                    .build();</span><br><span class="line">&lt;!--执行--&gt;</span><br><span class="line">    try (Response response = client.newCall(request).execute()) &#123;</span><br><span class="line">        System.out.println(response.body().string());</span><br><span class="line">     &#125; catch (IOException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">     &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-post请求"><a href="#2-post请求" class="headerlink" title="2.post请求"></a>2.post请求</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">OkHttpClient client = new OkHttpClient();</span><br><span class="line">&lt;!--与get的区别在于post需要定义一个MediaType--&gt;</span><br><span class="line">public static final MediaType MEDIA_TYPE_MARKDOWN=MediaType.parse(&quot;text/x-markdown; charset=utf-8&quot;);</span><br><span class="line">@Test</span><br><span class="line">public void testpost()&#123;</span><br><span class="line">    String postBody = &quot;sss&quot;;</span><br><span class="line">    Request request = new Request.Builder()</span><br><span class="line">            .url(&quot;http://localhost:8081/admin/test&quot;)</span><br><span class="line">            .post(RequestBody.create(MEDIA_TYPE_MARKDOWN, postBody))</span><br><span class="line">            .build();</span><br><span class="line"></span><br><span class="line">    try (Response response = client.newCall(request).execute()) &#123;</span><br><span class="line">        if (!response.isSuccessful()) throw new IOException(&quot;Unexpected code &quot; + response);</span><br><span class="line"></span><br><span class="line">        System.out.println(response.body().string());</span><br><span class="line">    &#125; catch (IOException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="3-post请求发送json"><a href="#3-post请求发送json" class="headerlink" title="3.post请求发送json"></a>3.post请求发送json</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">OkHttpClient client = new OkHttpClient();</span><br><span class="line">MediaType JSON = MediaType.parse(&quot;application/json; charset=utf-8&quot;);</span><br><span class="line">        JSONObject json = new JSONObject();</span><br><span class="line">        try &#123;</span><br><span class="line">            json.put(&quot;name1&quot;,&quot;name1&quot;);</span><br><span class="line">            json.put(&quot;name2&quot;,&quot;name2&quot;);</span><br><span class="line">        &#125; catch (JSONException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        RequestBody requestBody = RequestBody.create(JSON, String.valueOf(json));</span><br><span class="line">        Request request = new Request.Builder()</span><br><span class="line">                .url(&quot;http://XXX/api/auth&quot;)</span><br><span class="line">                .post(requestBody)</span><br><span class="line">                .build();</span><br><span class="line">        try &#123;</span><br><span class="line">            Response response = client.newCall(request).execute();</span><br><span class="line">            System.out.println(response.body().string());</span><br><span class="line">        &#125; catch (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="4-get请求-异步"><a href="#4-get请求-异步" class="headerlink" title="4.get请求(异步)"></a>4.get请求(异步)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">    OkHttpClient client = new OkHttpClient();</span><br><span class="line">    </span><br><span class="line">    @Test</span><br><span class="line">    public void testget()&#123;</span><br><span class="line">    String url=&quot;http://localhost:8081/admin/test&quot;;</span><br><span class="line">    Request request = new Request.Builder()</span><br><span class="line">                    .url(url)</span><br><span class="line">                    .build();</span><br><span class="line">&lt;!--执行--&gt;</span><br><span class="line">    final Call call = okHttpClient.newCall(request);</span><br><span class="line">new Thread(new Runnable() &#123;</span><br><span class="line">    @Override</span><br><span class="line">    public void run() &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            Response response = call.execute();</span><br><span class="line">            Log.d(TAG, &quot;run: &quot; + response.body().string());</span><br><span class="line">        &#125; catch (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;).start();</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
+    </nav>
   
 
 </div>

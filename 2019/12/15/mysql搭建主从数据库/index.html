@@ -7,23 +7,17 @@
   
   
   
-  <title>关于腾讯云与阿里云 | Mrefri&#39;blog</title>
+  <title>mysql搭建主从数据库 | Mrefri&#39;blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="腾讯云与阿里云我都买了，最开始买的是腾讯云的1核2G双十一活动88一年（当时阿里云最便宜的1核2G是学生套餐129，但是我弟认证了却还是显示要支付1000多，所以果断入了腾讯云）,然后腾讯云头疼的地方就来了,腾讯云华东的服务器在上海,docker镜像一直拉取失败，下图为证         没办法,尝试了国内镜像等措施无果后只能放弃了使用docker部署的打算，接下来问题又来了，为什么yum下">
+  <meta name="description" content="1、docker启动两个mysql实例主库： docker run -p 3307:3306 –name mysql-master &#x2F;&#x2F;设置挂载目-v &#x2F;mydata&#x2F;mysql&#x2F;master&#x2F;log:&#x2F;var&#x2F;log&#x2F;mysql -v &#x2F;mydata&#x2F;mysql&#x2F;master&#x2F;data:&#x2F;var&#x2F;lib&#x2F;mysql -v &#x2F;mydata&#x2F;mysql&#x2F;master&#x2F;conf:&#x2F;etc&#x2F;mysql">
 <meta property="og:type" content="article">
-<meta property="og:title" content="关于腾讯云与阿里云">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;10&#x2F;%E5%85%B3%E4%BA%8E%E8%85%BE%E8%AE%AF%E4%BA%91%E4%B8%8E%E9%98%BF%E9%87%8C%E4%BA%91&#x2F;index.html">
+<meta property="og:title" content="mysql搭建主从数据库">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;15&#x2F;mysql%E6%90%AD%E5%BB%BA%E4%B8%BB%E4%BB%8E%E6%95%B0%E6%8D%AE%E5%BA%93&#x2F;index.html">
 <meta property="og:site_name" content="Mrefri&#39;blog">
-<meta property="og:description" content="腾讯云与阿里云我都买了，最开始买的是腾讯云的1核2G双十一活动88一年（当时阿里云最便宜的1核2G是学生套餐129，但是我弟认证了却还是显示要支付1000多，所以果断入了腾讯云）,然后腾讯云头疼的地方就来了,腾讯云华东的服务器在上海,docker镜像一直拉取失败，下图为证         没办法,尝试了国内镜像等措施无果后只能放弃了使用docker部署的打算，接下来问题又来了，为什么yum下">
+<meta property="og:description" content="1、docker启动两个mysql实例主库： docker run -p 3307:3306 –name mysql-master &#x2F;&#x2F;设置挂载目-v &#x2F;mydata&#x2F;mysql&#x2F;master&#x2F;log:&#x2F;var&#x2F;log&#x2F;mysql -v &#x2F;mydata&#x2F;mysql&#x2F;master&#x2F;data:&#x2F;var&#x2F;lib&#x2F;mysql -v &#x2F;mydata&#x2F;mysql&#x2F;master&#x2F;conf:&#x2F;etc&#x2F;mysql">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;img&#x2F;timeout.jpg">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;img&#x2F;timeout1.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;img&#x2F;timeout2.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;img&#x2F;shezhi.jpg">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;img&#x2F;ip.jpg">
-<meta property="og:updated_time" content="2019-11-10T12:05:45.582Z">
+<meta property="og:updated_time" content="2019-11-28T02:56:23.487Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;img&#x2F;timeout.jpg">
   
     <link rel="alternative" href="/atom.xml" title="Mrefri&#39;blog" type="application/atom+xml">
   
@@ -226,11 +220,11 @@
         </header>
     </div>
 </nav>
-      <div class="body-wrap"><article id="post-关于腾讯云与阿里云" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-mysql搭建主从数据库" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a  href="/2019/11/10/%E5%85%B3%E4%BA%8E%E8%85%BE%E8%AE%AF%E4%BA%91%E4%B8%8E%E9%98%BF%E9%87%8C%E4%BA%91/" class="article-date">
-      <time datetime="2019-11-10T11:18:26.000Z" itemprop="datePublished">2019-11-10</time>
+      <a  href="/2019/12/15/mysql%E6%90%AD%E5%BB%BA%E4%B8%BB%E4%BB%8E%E6%95%B0%E6%8D%AE%E5%BA%93/" class="article-date">
+      <time datetime="2019-12-15T13:07:11.798Z" itemprop="datePublished">2019-12-15</time>
 </a>
 
     </div>
@@ -244,7 +238,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      关于腾讯云与阿里云
+      mysql搭建主从数据库
     </h1>
   
 
@@ -262,8 +256,24 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p>   腾讯云与阿里云我都买了，最开始买的是腾讯云的1核2G双十一活动88一年（当时阿里云最便宜的1核2G是学生套餐129，但是我弟认证了却还是显示要支付1000多，所以果断入了腾讯云）,然后腾讯云头疼的地方就来了,腾讯云华东的服务器在上海,docker镜像一直拉取失败，下图为证<br>   <img src="/img/timeout.jpg" alt="timeout1" title="Title"><br>   <img src="/img/timeout1.png" alt="timeout2" title="Title"><br>   没办法,尝试了国内镜像等措施无果后只能放弃了使用docker部署的打算，接下来问题又来了，为什么yum下载不了mysql?<br>   <img src="/img/timeout2.png" alt="timeout3" title="Title"><br>   提交工单后，腾讯云运维告知只能安装mariadb,那好吧,又是麻烦的安装完配置root外网访问权限时间，等我部署完第一个项目已是一周后（工作原因只在空闲时间倒腾）。<br>   在我买完腾讯云后，阿里云也马上也降价双十一86元一年（wtf?我才刚买没两天）,后来又按奈不住想在服务器上玩docker的心，直接入手了1核2G三年220,买完之后就觉得真香，docker下镜像根本不用配置国内镜像秒下，原来腾讯云倒腾了一周要部署的项目居然半天就部好了，docker真香。不过阿里云网页登录操作界面貌似有个bug，这点体验没有腾讯云好，不过用xshell登录都无所谓了。</p>
-<h3 id="关于第一次买阿里云以及腾讯云需要注意的点"><a href="#关于第一次买阿里云以及腾讯云需要注意的点" class="headerlink" title="关于第一次买阿里云以及腾讯云需要注意的点"></a>关于第一次买阿里云以及腾讯云需要注意的点</h3><p>   <strong>一定要先配置安全组！！！！一定要先配置安全组！！！！一定要先配置安全组！！！！</strong>重要的事情说三遍，不然你可能马上就会发现 what?怎么xshell连不上服务器，怎么部署的应用访问不了，这边都是需要配置入站规则的，以腾讯云为例一键放通已经覆盖了大部分常用的端口比如22,3306等也可以在教我设置里查看规则配置<br>   <img src="/img/shezhi.jpg" alt="shezhi" title="Title"><br>   第二在实例界面查看公网以及内网ip,xshell可以用公网ip直接连接服务器<br>   <img src="/img/ip.jpg" alt="ip" title="Title"><br>   还有关于navicat连接docker安装的最新mysql报错1251的问题，网上解释是mysql8的加密规则和以往不同，试了进入docker的mysql修改加密规则后依然无效，这时我docker重下了mysql5.6后启动镜像就顺畅没有问题了。</p>
+        <h2 id="1、docker启动两个mysql实例"><a href="#1、docker启动两个mysql实例" class="headerlink" title="1、docker启动两个mysql实例"></a>1、docker启动两个mysql实例</h2><p>主库：</p>
+<p>docker run -p 3307:3306 –name mysql-master <br>//设置挂载目<br>-v /mydata/mysql/master/log:/var/log/mysql <br>-v /mydata/mysql/master/data:/var/lib/mysql <br>-v /mydata/mysql/master/conf:/etc/mysql <br>-e MYSQL_ROOT_PASSWORD=123456 <br>-d mysql:5.6</p>
+<p>从库：</p>
+<p>docker run -p 3316:3306 –name mysql-slaver-01 <br>-v /mydata/mysql/slaver/log:/var/log/mysql <br>-v /mydata/mysql/slaver/data:/var/lib/mysql <br>-v /mydata/mysql/slaver/conf:/etc/mysql <br>-e MYSQL_ROOT_PASSWORD=123456 <br>-d mysql:5.6</p>
+<h2 id="2、修改主从表配置"><a href="#2、修改主从表配置" class="headerlink" title="2、修改主从表配置"></a>2、修改主从表配置</h2><p>//主表配置<br>vim /mydata/mysql/master/conf/my.cnf</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">server_id=1</span><br><span class="line">log-bin=mysql-bin</span><br><span class="line">read-only=0</span><br><span class="line">binlog-do-db=xxx//数据库表名</span><br><span class="line">//忽略表名</span><br><span class="line">replicate-ignore-db=mysql</span><br><span class="line">replicate-ignore-db=sys</span><br><span class="line">replicate-ignore-db=information_schema</span><br><span class="line">replicate-ignore-db=performance_schema</span><br></pre></td></tr></table></figure>
+
+
+<p>//从表配置<br>vim /mydata/mysql/slaver/conf/my.cnf</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">server_id=2</span><br><span class="line">log-bin=mysql-bin</span><br><span class="line">read-only=1</span><br><span class="line">binlog-do-db=xxx//数据库表名与主表的表名保持一致</span><br><span class="line">replicate-ignore-db=mysql</span><br><span class="line">replicate-ignore-db=sys</span><br><span class="line">replicate-ignore-db=information_schema</span><br><span class="line">replicate-ignore-db=performance_schema</span><br></pre></td></tr></table></figure>
+<p>重启主从数据库</p>
+<h2 id="3、主表授权用户同步数据"><a href="#3、主表授权用户同步数据" class="headerlink" title="3、主表授权用户同步数据"></a>3、主表授权用户同步数据</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it mysql /bin/bash//进入主表容器</span><br><span class="line">mysql –uroot -p//登录</span><br><span class="line">GRANT REPLICATION SLAVE ON *.* to &apos;用户名&apos;@&apos;%&apos; identified by &apos;密码&apos;;//添加授权的用户</span><br><span class="line">show master status//查看状态</span><br></pre></td></tr></table></figure>
+<h2 id="4、设置从表使用账号同步主表"><a href="#4、设置从表使用账号同步主表" class="headerlink" title="4、设置从表使用账号同步主表"></a>4、设置从表使用账号同步主表</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it mysql-slaver-01 /bin/bash//进入从表容器</span><br><span class="line">mysql –uroot -p//登录</span><br><span class="line">change master to master_host=&apos;主表ip&apos;,master_user=&apos;用户名&apos;,master_password=&apos;密码&apos;,master_log_file=&apos;mysql-bin.000001&apos;,master_log_pos=0,master_port=3307;//用户名密码与主表授权用户一致</span><br><span class="line">start slave;//启动从表同步</span><br><span class="line">show slave status\G;//查看从库状态</span><br></pre></td></tr></table></figure>
+<p>当显示</p>
+<ul>
+<li>Slave_IO_Running: Yes</li>
+<li>Slave_SQL_Running: Yes<br>则说明同步成功</li>
+</ul>
 
       
     </div>
@@ -272,13 +282,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a  href="/2019/11/10/%E5%85%B3%E4%BA%8E%E8%85%BE%E8%AE%AF%E4%BA%91%E4%B8%8E%E9%98%BF%E9%87%8C%E4%BA%91/">关于腾讯云与阿里云</a></p>
+        <p><span>本文标题:</span><a  href="/2019/12/15/mysql%E6%90%AD%E5%BB%BA%E4%B8%BB%E4%BB%8E%E6%95%B0%E6%8D%AE%E5%BA%93/">mysql搭建主从数据库</a></p>
         <p><span>文章作者:</span><a  href="/" title="访问 Mrefri 的个人博客">Mrefri</a></p>
-        <p><span>发布时间:</span>2019年11月10日 - 19时18分</p>
-        <p><span>最后更新:</span>2019年11月10日 - 20时05分</p>
+        <p><span>发布时间:</span>2019年12月15日 - 21时07分</p>
+        <p><span>最后更新:</span>2019年11月28日 - 10时56分</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2019/11/10/%E5%85%B3%E4%BA%8E%E8%85%BE%E8%AE%AF%E4%BA%91%E4%B8%8E%E9%98%BF%E9%87%8C%E4%BA%91/" title="关于腾讯云与阿里云">http://yoursite.com/2019/11/10/%E5%85%B3%E4%BA%8E%E8%85%BE%E8%AE%AF%E4%BA%91%E4%B8%8E%E9%98%BF%E9%87%8C%E4%BA%91/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2019/11/10/%E5%85%B3%E4%BA%8E%E8%85%BE%E8%AE%AF%E4%BA%91%E4%B8%8E%E9%98%BF%E9%87%8C%E4%BA%91/　　作者: Mrefri" title=""></span>
+            <span>原始链接:</span><a class="post-url" href="/2019/12/15/mysql%E6%90%AD%E5%BB%BA%E4%B8%BB%E4%BB%8E%E6%95%B0%E6%8D%AE%E5%BA%93/" title="mysql搭建主从数据库">http://yoursite.com/2019/12/15/mysql%E6%90%AD%E5%BB%BA%E4%B8%BB%E4%BB%8E%E6%95%B0%E6%8D%AE%E5%BA%93/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2019/12/15/mysql%E6%90%AD%E5%BB%BA%E4%B8%BB%E4%BB%8E%E6%95%B0%E6%8D%AE%E5%BA%93/　　作者: Mrefri" title=""></span>
         </p>
         <p>
             <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" target="_blank" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
@@ -289,18 +299,18 @@
 
 <nav id="article-nav">
   
-    <a  href="/2019/12/15/@PathVariable%E6%B3%A8%E8%A7%A3%E4%BD%BF%E7%94%A8/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a  href="/2019/12/15/OAuth2%E5%8D%95%E7%82%B9%E7%99%BB%E5%BD%95%E5%BE%AE%E5%8D%9A/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption"><</strong>
       <div class="article-nav-title">
         
-          @PathVariable注解使用
+          OAuth2单点登录微博
         
       </div>
     </a>
   
   
-    <a  href="/2019/11/10/%E5%89%8D%E8%A8%80/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">前言</div>
+    <a  href="/2019/12/15/mybatisPlus%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">mybatisPlus注意事项</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
@@ -312,7 +322,7 @@
 
     <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#关于第一次买阿里云以及腾讯云需要注意的点"><span class="toc-number">1.</span> <span class="toc-text">关于第一次买阿里云以及腾讯云需要注意的点</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1、docker启动两个mysql实例"><span class="toc-number">1.</span> <span class="toc-text">1、docker启动两个mysql实例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2、修改主从表配置"><span class="toc-number">2.</span> <span class="toc-text">2、修改主从表配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3、主表授权用户同步数据"><span class="toc-number">3.</span> <span class="toc-text">3、主表授权用户同步数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4、设置从表使用账号同步主表"><span class="toc-number">4.</span> <span class="toc-text">4、设置从表使用账号同步主表</span></a></li></ol>
 </div>
 <style>
     .left-col .switch-btn {
@@ -385,13 +395,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a  href="/2019/12/15/@PathVariable%E6%B3%A8%E8%A7%A3%E4%BD%BF%E7%94%A8/" title="上一篇: @PathVariable注解使用">
+            <a  href="/2019/12/15/OAuth2%E5%8D%95%E7%82%B9%E7%99%BB%E5%BD%95%E5%BE%AE%E5%8D%9A/" title="上一篇: OAuth2单点登录微博">
                 <i class="fa fa-angle-left"></i>
             </a>
         
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
         
-            <a  href="/2019/11/10/%E5%89%8D%E8%A8%80/" title="下一篇: 前言">
+            <a  href="/2019/12/15/mybatisPlus%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/" title="下一篇: mybatisPlus注意事项">
                 <i class="fa fa-angle-right"></i>
             </a>
         
